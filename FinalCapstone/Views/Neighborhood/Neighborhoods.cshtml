@@ -1,0 +1,46 @@
+﻿@model NeighborhoodViewModel
+@{
+    ViewData["Title"] = "Neighborhoods";
+}
+
+@if (!string.IsNullOrEmpty(Model.NewReviewResult))
+{
+    <div class="new-item-confirm alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Success!</strong> @Model.NewReviewResult
+    </div>
+}
+
+<h2><b>Neighborhoods</b></h2>
+
+<section>
+    @foreach (Neighborhood neighborhood in Model.Neighborhoods)
+    {
+        <div>
+            <div class="col-sm-7">
+                <div class="hovereffect">
+                    <img class="img-responsive" img src="~/images/@(neighborhood.NeighborhoodId).jpg" alt="@neighborhood.NeighborhoodName Photo">
+                    <div class="overlay">
+                        <a asp-controller="Landmark" asp-action="Index" asp-route-id="@(neighborhood.NeighborhoodId)">
+                            <p style="color:white">@neighborhood.NeighborhoodName</p>
+                        </a>
+                    </div>
+                </div>
+                <form asp-controller="Landmark" asp-action="Index" asp-route-id="@neighborhood.NeighborhoodId">
+                    <button id="grey-button" type="submit">Explore the Neighborhood</button>
+                </form>
+                <form asp-controller="Location" asp-action="Locations" asp-route-id="@neighborhood.NeighborhoodId">
+                    <button id="grey-button" type="submit">See Attractions Nearby</button>
+                </form>
+            </div>
+            <br />
+            <div class="col-sm-5">
+                <h4>@neighborhood.Blurbs</h4>
+            </div>
+            
+            <p></p>
+
+        </div>
+    }
+</section>
+

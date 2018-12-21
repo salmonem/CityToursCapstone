@@ -1,0 +1,93 @@
+﻿@model NeighborhoodViewModel
+
+@{
+    ViewData["Title"] = "City Tours";
+}
+
+
+<head>
+    <title>Columbus Tours</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="~/css/main.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/moo.css" rel="stylesheet">
+    <link href="css/responsive.css" rel="stylesheet">
+</head>
+<body>
+
+    @*  *@
+    <div class="carousel">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="carousel-content">
+                    <h1 class="animation animated-item-1">Columbus City Tours</h1>
+                    <div class="animation animated-item-2"> The Finest way to explore Ohio's capital city.</div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div id="my-slider" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <li data-target="#my-slider" data-slide-to="0" class="active"></li>
+                        <li data-target="#my-slider" data-slide-to="1"></li>
+                        <li data-target="#my-slider" data-slide-to="2"></li>
+                        <li data-target="#my-slider" data-slide-to="3"></li>
+                        <li data-target="#my-slider" data-slide-to="4"></li>
+                    </ol>
+                    <div class="carousel-inner" role="listbox">
+                        <div class="item active">
+                            <a asp-controller="Landmark" asp-action="Index" asp-route-id="DT">
+                                <img src="~/images/DT.jpg" class="img-responsive center-block" alt="DT Photo">
+                            </a>
+                            <div class="carousel-caption">
+                                <p>Downtown</p>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <a asp-controller="Landmark" asp-action="Index" asp-route-id="SN">
+                                <img src="~/images/SN.jpg" class="img-responsive center-block" alt="SN Photo">
+                            </a>
+                            <div class="carousel-caption">
+                                <p>Short North</p>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <a asp-controller="Landmark" asp-action="Index" asp-route-id="PN">
+                                <img src="~/images/PN.jpg" class="img-responsive center-block" alt="PN Photo">
+                            </a>
+                            <div class="carousel-caption">
+                                <p>Polaris/North</p>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <a asp-controller="Landmark" asp-action="Index" asp-route-id="CA">
+                                <img src="~/images/CA.jpg" class="img-responsive center-block" alt="CA Photo">
+                            </a>
+                            <div class="carousel-caption">
+                                <p>Campus/Upper Arlington</p>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <a asp-controller="Landmark" asp-action="Index" asp-route-id="EA">
+                                <img src="~/images/EA.jpg" class="img-responsive center-block" alt="EA Photo">
+                            </a>
+                            <div class="carousel-caption">
+                                <p>Easton</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="left carousel-control" href="#my-slider" role="button" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    </a>
+                    <a class="right carousel-control" href="#my-slider" role="button" data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+

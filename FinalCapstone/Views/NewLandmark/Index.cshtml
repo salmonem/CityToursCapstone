@@ -1,0 +1,52 @@
+﻿@model Landmark
+
+@{
+    ViewData["Title"] = "NewLandmark";
+}
+
+@*<style>
+    .new-attraction-align {
+        column-count: 1;
+        width: 25%;
+    }
+</style>*@
+
+<h2>New Attraction</h2>
+
+<form asp-action="Index" method="post">
+
+    <label class="new-attraction-align" asp-for="NeighborhoodId"></label>
+    <select asp-for="NeighborhoodId" asp-items="Neighborhood.ListOfNeighborhoodIds"></select>
+    <p></p>
+    <label class="new-attraction-align" asp-for="Code"></label>
+    <input asp-for="Code" />
+    <span asp-validation-for="Code" class="text-danger"></span>
+    <p></p>
+    <label class="new-attraction-align" asp-for="Name"></label>
+    <input asp-for="Name" />
+    <span asp-validation-for="Name" class="text-danger"></span>
+    <p></p>
+    <label class="new-attraction-align" asp-for="AttractionAddress"></label>
+    <input asp-for="AttractionAddress" />
+    <span asp-validation-for="AttractionAddress" class="text-danger"></span>
+    <p></p>
+    <label class="new-attraction-align" asp-for="Type"></label>
+    <input asp-for="Type" placeholder="Restaurant, Arena, Park, or Activity Center" />
+    <span asp-validation-for="Type" class="text-danger"></span>
+    <p></p>
+    <label class="new-attraction-align" asp-for="Description"></label>
+    <input asp-for="Description" />
+    <span asp-validation-for="Description" class="text-danger"></span>
+    <p></p>
+    <label class="new-attraction-align" asp-for="Hours"></label>
+    <input asp-for="Hours" placeholder="Day 00:00 - 00:00, Day 00:00, etc" />
+    <span asp-validation-for="Hours" class="text-danger"></span>
+    <p></p>
+    <label class="new-attraction-align" asp-for="Features"></label>
+    <input asp-for="Features" placeholder="Food, games, 21+, etc" />
+    <span asp-validation-for="Features" class="text-danger"></span>
+    
+    <div style="text-align:center;">
+        <button class="grey-button" type="submit">Submit</button>
+    </div>
+</form>

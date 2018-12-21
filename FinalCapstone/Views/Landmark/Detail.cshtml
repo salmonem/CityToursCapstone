@@ -1,0 +1,158 @@
+﻿@model DisplayReviewsViewModel
+@{
+    ViewData["Title"] = "Detail";
+}
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
+
+<style>
+
+    h2, h3, p, div {
+        text-align: center;
+    }
+</style>
+
+<body>
+    @foreach (Landmark landmark in Model.Landmarks)
+    {
+        <h2><b>@(landmark.Name)</b></h2>
+        <p id="landmark-italics">@(landmark.NeighborhoodName)</p>
+        <section>
+            <div>
+                <img class="image-detail" src="~/images/@(landmark.NeighborhoodId)-@(landmark.Code).jpg" alt="@landmark.Name">
+            </div>
+            <div>
+                <h5>@landmark.Type</h5>
+                <h5>@landmark.AttractionAddress</h5>
+                <h5>Hours: @landmark.Hours</h5>
+                <h5>@landmark.Description</h5>
+                <h5>Features: @landmark.Features</h5>
+                @if (landmark.Features.Contains("alcohol"))
+                {
+                    <i class="fas fa-wine-glass-alt"></i>
+                }
+                @if (landmark.Features.Contains("cafe"))
+                {
+                    <i class="fas fa-coffee"></i>
+                }
+                @if (landmark.Features.Contains("friendly"))
+                {
+                    <i class="fas fa-child"></i>
+                }
+            </div>
+            <div>
+                <form asp-action="AddToItinerary" asp-controller="Itinerary" asp-route-id="@(landmark.Code)" method="post">
+                    <input type="hidden" asp-for="@(landmark.Code)" />
+                    <div>
+                        <button id="grey-button" type="submit">Add to Itinerary</button>
+                    </div>
+                </form>
+            </div>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div>
+                    <form asp-action="NewReview" asp-controller="Review" asp-route-id="@(landmark.Code)" method="get">
+                        <input type="hidden" asp-for="@(landmark.Code)" />
+                        <div>
+                            <button id="grey-button" type="submit">Add a Review</button>
+                        </div>
+                    </form>
+                </div>
+                @if (User.Identity.Name.Contains("admin"))
+                {
+                    <div>
+                        <form asp-action="Delete" asp-controller="Landmark" asp-route-id="@(landmark.Code)" method="post">
+                            <input type="hidden" asp-for="@(landmark.Code)" />
+                            <div>
+                                <button id="grey-button" type="submit">Delete Landmark</button>
+                            </div>
+                        </form>
+                    </div>
+                }
+            }
+        </section>
+    }
+
+</body>
+
+@foreach (Landmark landmark in Model.Landmarks)
+{
+    <h3><b>@(landmark.Name) Shared Photos</b></h3>
+}
+
+<section class="container">
+    <div class="row">
+        @foreach (Landmark landmark in Model.Landmarks)
+        {
+            @foreach (var image in Model.Images)
+            {
+                if (image.Contains(landmark.Code))
+                {
+                    <div class="col-sm-3">
+                        <img src="~/userImages/@(image)" class="img-responsive center-block" alt="@landmark.Name Photo">
+                    </div>
+                }
+            }
+        }
+    </div>
+</section>
+<section class="container">
+    <div>
+        @if (User.Identity.IsAuthenticated)
+        {
+            @foreach (Landmark landmark in Model.Landmarks)
+            {
+                <form method="post" enctype="multipart/form-data" asp-controller="Upload" asp-action="Index" asp-route-id="@(landmark.Code)">
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <p>Upload one or more files using this form:</p>
+                            <input type="file" name="files" multiple />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <input type="submit" value="Upload" />
+                        </div>
+                    </div>
+                </form>
+            }
+        }
+    </div>
+</section>
+
+@foreach (Landmark landmark in Model.Landmarks)
+{
+    <h3><b>@(landmark.Name) Reviews</b></h3>
+}
+
+<section class="container">
+    <table class="table-striped">
+        <div class="row">
+            @foreach (Review review in Model.Reviews)
+            {
+                <tr>
+                    <td><strong>@review.Subject</strong></td>
+                </tr>
+                <tr>
+                    <td>
+                        @for (int i = 0; i < @review.Rating; i++)
+                        {
+                            <img class="ratings" src="~/images/Buckeye.png" />;
+                        }
+                    </td>
+                </tr>
+                <tr style="font-size: 75%;">
+                    <td>by @review.Username</td>
+                </tr>
+                <tr style="font-size: 75%;">
+                    <td>on @review.ReviewDate</td>
+                </tr>
+                <tr style="font-size: 75%;">
+                    <td>@review.Message</td>
+                </tr>
+            }
+        </div>
+    </table>
+</section>
+
+

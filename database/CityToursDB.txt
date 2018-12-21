@@ -1,0 +1,1240 @@
+
+
+DROP TABLE Neighborhoods;
+DROP TABLE Attractions;
+DROP TABLE Neighborhood_blurb;
+DROP TABLE [dbo].[instructors]
+DROP TABLE [dbo].[log]
+
+CREATE TABLE [dbo].[Attractions](
+	[code] [nvarchar] (4) NOT NULL,
+	[name] [nvarchar] (200) NOT NULL,
+	[type]  [nvarchar] (20),
+	[description] [nvarchar] (800),
+	[features] [nvarchar] (800),
+	[hours] [nvarchar](800),
+PRIMARY KEY CLUSTERED 
+(
+	[Code] ASC
+)
+)
+
+CREATE TABLE [dbo].[Neighborhoods](
+	[neighborhood_name] [nvarchar] (50),
+	[neighborhood_id] [nvarchar] (2), 
+	[attraction_neighborhood] [nvarchar] (7) NOT NULL,
+	[attraction_code] [nvarchar] (4),
+	[attraction_address]  [nvarchar] (300),
+	[latitude] numeric (10,6),
+	[longitude] numeric (10,6),
+	PRIMARY KEY CLUSTERED 
+(
+	[attraction_neighborhood] ASC
+))
+
+	ALTER TABLE [Neighborhoods]
+	ADD FOREIGN KEY (attraction_code) REFERENCES Attractions(code);
+
+CREATE TABLE [dbo].[Neighborhood_blurb](
+[neighborhood_id] [nvarchar] (7),
+[blurb] [nvarchar] (2000),
+)
+
+CREATE TABLE [dbo].[instructors](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[first_name] [nvarchar](30) NOT NULL,
+	[last_name] [nvarchar](30) NOT NULL,
+	[email_address] [nvarchar](50) NOT NULL,
+	[password] [nvarchar](30) NULL,
+	[is_admin] [bit] NOT NULL
+)
+
+
+CREATE TABLE [dbo].[log](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[session_id] [nvarchar](50) NOT NULL,
+	[timestamp] [datetime] NOT NULL,
+	[message] [nvarchar](1000) NOT NULL
+) 
+
+ALTER TABLE [Neighborhood_blurb]
+ADD FOREIGN KEY (neighborhood_id) REFERENCES Neighborhoods (neighborhood_id);
+
+ALTER TABLE instructors ADD CONSTRAINT PK_Instructors PRIMARY KEY (id);
+ALTER TABLE log ADD CONSTRAINT PK_Log PRIMARY KEY (id);
+
+SET IDENTITY_INSERT [dbo].[instructors] ON 
+INSERT [dbo].[instructors] ([id], [first_name], [last_name], [email_address], [password], [is_admin]) VALUES (1, N'John', N'Fulton', N'john@techelevator.com', N'password', 0)
+INSERT [dbo].[instructors] ([id], [first_name], [last_name], [email_address], [password], [is_admin]) VALUES (2, N'Brian', N'Lauvray', N'brian@techelevator.com', N'password', 0)
+INSERT [dbo].[instructors] ([id], [first_name], [last_name], [email_address], [password], [is_admin]) VALUES (3, N'Steve', N'Carmichael', N'steve@techelevator.com', N'password', 0)
+SET IDENTITY_INSERT [dbo].[instructors] OFF
+
+
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+	,[features]
+           ,[hours])
+     VALUES
+           ('ELEV'
+           ,'Elevator Brewery and Draught Haus'
+           ,'Restaurant'
+	,'$$, alcohol, vegetarian options, gluten free options, takes reservations'
+           ,'Historic restaurant and brewery serving lunch and dinner'		
+           ,'Monday - Friday 11:00AM - 11:00PM, Saturday 5:00PM - 11:00PM, Sunday Closed');
+
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+	,[features]
+           ,[hours])
+     VALUES
+           ('AMIC'
+           ,'Due Amici'
+           ,'Restaurant'
+           ,'Modern Italian dining experience'
+	,'$$, takes reservations'
+           ,'Monday - Thursday 11:00AM - 10:00PM, Friday - Saturday 11:00AM - 11:00PM, Sunday 11:00AM - 9:00PM');
+
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+	,[features]
+           ,[hours])
+     VALUES
+           ('MILE'
+           ,'Milestone 229'
+           ,'Restaurant'
+           ,'Restaurant with views of scioto mile and bicentennial park.'
+	,'$$, takes reservations, scenic, monthly specialty dinners'
+           ,'Monday - Thursday 11:00AM - 10:00PM, Friday - Saturday 11:00AM - 11:00PM, Sunday 11:00AM - 9:00PM');
+
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+	,[features]
+           ,[hours])
+     VALUES
+           ('FRAN'
+           ,'Dirty Franks'
+           ,'Restaurant'
+           ,'Only the best hotdogs in town'
+		   ,'$, family-friendly, vegan options, vegetarian options'
+           ,'Monday - Sunday 11:00AM - 1:45AM.');
+
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+	,[features]
+           ,[hours])
+     VALUES
+           ('MIRA'
+           ,'M at Miranova'
+           ,'Restaurant'
+           ,'Upscale bistro & bar serving Asian-tinged American fare in a chic, airy setting with a patio.They have the best mixologist in town.'
+	,'$$$, alcohol'
+           ,'Monday - Thursday 5:00PM - 10:00PM, Friday - Saturday 5:00PM - 11:00PM, Sunday Closed.');
+
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+		   ,[features]
+           ,[hours])
+     VALUES
+           ('COSI'
+			,'COSI'
+           ,'Activity Center'
+           ,'COSI is a science museum and research center located in Columbus, Ohio in the United States. Originally opened in 1964, COSI was relocated to a 320,000 square foot state-of-the-art facility in 1999.'
+           ,'Family-friendly, all-ages, IMAX'
+		   ,'Monday Closed, Tuesday Closed, Wednesday - Sunday 10:00AM - 5:00PM');
+
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+	,[features]
+           ,[hours])
+     VALUES
+           ('LAND'
+           ,'Land-Grant Brewing'
+           ,'Brewery'
+           ,'Land-Grant Brewing Company, a production craft brewery in Columbus, Ohio. Land-Grant was born from a passion for painstakingly-crafted beer, powerful design, and a midwestern sports devotion.'
+	,'Food trucks'
+           ,'Monday - Wednesday 3:30PM - 10:00PM, Thursday - Saturday 11:30AM - 12:00AM, Sunday 11:30AM - 8:00PM');
+
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+	,[features]
+           ,[hours])
+     VALUES
+           ('NORT'
+           ,'North Market'
+           ,'Shopping'
+           ,'Central Ohio''s authentic public market. Since 1876 our merchants, farmers, and makers have loyally served the community and its visitors. We provide an authentic Columbus, Ohio experience that highlights the diversity and vibrancy of our community, both economically and culturally by promoting “best-in-class” local, independent businesses.'
+	,'Food, alcohol'
+           ,'Monday 10:00AM - 5:00PM, Tuesday - Saturday 9:00AM - 7:00PM, Sunday 10:00AM - 5:00PM');
+
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+	,[features]
+           ,[hours])
+     VALUES
+           ('EXPR'
+           ,'Express Live'
+           ,'Concert Venue'
+           ,'Express Live! is a multi-purpose concert venue located in the Arena District of Columbus, Ohio. Opening in 2001, the venues operates year-round with indoor and outdoor facilities: the Indoor Music Hall and Outdoor Amphitheater.'
+	,'alcohol, food, all ages'
+           ,'Depends on showtimes');
+
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+	,[features]
+           ,[hours])
+     VALUES
+           ('ARTM'
+           ,'Columbus Art Museum '
+           ,'Museum'
+           ,'The Columbus Museum of Art is an art museum located in downtown Columbus, Ohio. Formed in 1878 as the Columbus Gallery of Fine Arts, it was the first art museum to register its charter with the state of Ohio. '
+           ,'family-friendly, cafe'
+		   ,'Monday Closed, Tuesday - Sunday 10:00AM - 5:00PM');
+
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+		   ,[features]
+           ,[hours])
+     VALUES
+           ('16BT'
+           ,'16 Bit Bar and Arcade' 
+           ,'Bar'
+           ,'16-Bit is a retro watering hole offering classic arcade games, old-school cocktails and an awesome beer selection.'
+           ,'21+, video games'
+		   ,'Monday - Friday 4:00PM - 2:30AM, Saturday - Sunday 12:00PM - 2:30AM');
+
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+	,[features]
+           ,[hours])
+     VALUES
+           ('SKUL'
+           ,'Skully''s' 
+           ,'Bar/ Nightclub'
+           ,'Energetic diner/club/bar with live music & DJs, dancing, theme nights & American eats.'
+           ,'$$, food, live music, 18+'
+		   ,'Monday - Friday 11:00AM - 2:30AM, Saturday 12:00PM - 2:30AM, Sunday 1:00PM - 2:30AM');
+
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+	,[features]
+           ,[hours])
+     VALUES
+           ('AXIS'
+           ,'Axis Nightclub' 
+           ,'Bar/ Nightclub'
+           ,'A multilevel gay-friendly dance club featuring DJs & entertainment such as drag cabaret acts.'
+	,'18+'
+           ,'Monday Closed, Tuesday Closed, Wednesday Closed, Thursday Closed, Friday - Sunday 10:00PM - 2:30AM');
+
+
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+	,[features]
+           ,[hours])
+     VALUES
+           ('JENI'
+           ,'Jeni''s Splendid Ice Cream' 
+           ,'Cafe'
+           ,'Chain scooping creative flavors of ice cream & frozen yogurt made from local ingredients.'
+	,'$$, family friendly'
+           ,'Monday - Thursday 12:00 - 10:00PM, Friday - Saturday 12:00 - 11:00PM, Sunday 12:00 - 10:00PM
+');
+
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+		   ,[features]
+           ,[hours])
+     VALUES
+           ('MELT'
+           ,'Melt Bar and Grilled' 
+           ,'Restaurant'
+           ,'Informal sandwich shop featuring over-the-top grilled cheeses plus burgers, beer & wine.'
+           ,'$$, takes reservations, happy hour, family-friendly, alcohol, vegetarian options'
+		   ,'Monday - Thursday 11:00AM - 10:00PM, Friday - Saturday 11:00AM - 11:00PM, Sunday 11:00AM - 10:00PM');
+		   
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+	,[features]
+           ,[hours])
+     VALUES
+           ('SSBW'
+           ,'Seventh Son Brewery' 
+           ,'Brewery'
+           ,'Brewery specializing in ales & IPAs with a bright, rustic tasting room & visiting food trucks.'
+	,'21+, food trucks, alcohol'
+           ,'Monday 4:00 - 11:00PM, Tuesday - Thursdays 3:30PM – 12:00AM, Friday 11:00AM - 2:00AM, Saturday - Sunday 11:00AM - 12:00AM');	   
+		   
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+	,[features]
+           ,[hours])
+     VALUES
+           ('FOXC'
+           ,'Fox in the Snow Café' 
+           ,'Restaurant'
+           ,'Airy coffee shop featuring java drinks, baked goods, tarts & biscuits in a modernized garage space.'
+	,'$$, family friendly'
+           ,'Monday - Friday 7:00AM - 5:00PM, Saturday - Sunday 8:00AM - 5:00PM');	   	
+
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+		   ,[features]
+           ,[hours])
+     VALUES
+           ('POFP'
+           ,'Polaris Fashion Place' 
+           ,'Shopping'
+           ,'Valet parking with remote retrieval, stunning architecture, full-service restaurants, a 775-seat food court, one of central Ohio’s largest children’s soft play areas and a magnificent 155,000-square-foot outdoor redevelopment.'
+          ,'Family-friendly, food, cafes, games'
+		  ,'Monday - Thursday 10:00AM - 9:00PM, Friday - Saturday 10:00AM - 9:30PM, Sunday 9:00AM - 9:00PM');	  		   
+		   
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+		   ,[features]
+           ,[hours])
+     VALUES
+           ('IKEA'
+           ,'IKEA' 
+           ,'Shopping'
+	,'Scandinavian chain selling ready-to-assemble furniture, plus housewares, in a warehouse-like space.'
+           ,'Child-care, restaurant, cafe'
+		   ,'Monday - Saturday 10:00AM - 9:00PM, Sunday 10:00AM - 8:00PM');	 	
+
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+	,[features]
+           ,[hours])
+     VALUES
+           ('CAXE'
+           ,'Columbus Axe Throwing' 
+           ,'Activity Center'
+	,'A different and unique activity of throwing axes at targets and competing with friends. Safety and techniques taught by an instructor.'
+	,'Takes reservations, games'
+           ,'Monday - Friday 11:00AM - 10:30PM, Saturday 12:00 - 10:30PM, Sunday 12:00 - 7:30PM');	
+
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+		   ,[features]
+           ,[hours])
+     VALUES
+           ('CZOO'
+           ,'Columbus Zoo' 
+           ,'Activity Center'
+	,'A non-profit zoo and aquarium with an attached water park attraction; fun for the whole family.'
+           ,'Family-friendly, food, games'
+		   ,'Monday - Thursday 10:00AM - 9:00PM, Friday - Saturday 10:00AM - 10:00PM, Sunday 10:00AM - 9:00PM');	 
+
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+	,[features]
+           ,[hours])
+     VALUES
+           ('POGL'
+           ,'Polaris Grill' 
+           ,'Restaurant'
+	,'An elegant but comfortable setting offering a wide-ranging menu with some regional American dishes.'
+	,'$$, takes reservations, alcohol'
+           ,'Monday - Saturday 11:00AM - 10:00PM, Sunday 10:00AM - 9:00PM');	
+
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+		   ,[features]
+           ,[hours])
+     VALUES
+           ('CARF'
+           ,'Carfagna''s Kitchen' 
+           ,'Restaurant'
+	,'Family-owned Italian restaurant with authentic handmade dishes with fresh ingredients for pastas, pizzas, dishes, and sauces.'
+           ,'$, catering, family-friendly, marketplace'
+		   ,'Monday - Thursday 11:00AM - 9:00PM, Friday 11:00AM - 10:00PM, Saturday 12:00 - 10:00PM, Sunday Closed');		
+
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+	,[features]
+           ,[hours])
+     VALUES
+			('OCCL'
+           ,'Mitchell''s Ocean Club' 
+           ,'Restaurant'
+	,'Upscale supper club with a seafood focus, prime steaks, piano bar & 50+ wines by the glass.'
+	,'$$$, takes reservations, Cameron Mitchell restaurant, gluten free options'
+           ,'Monday - Saturday 5:00PM - 9:00PM, Sunday 4:00PM - 9:00PM');		
+	 
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+	,[features]
+           ,[hours])
+     VALUES
+			('COHA'
+           ,'Cooper''s Hawk' 
+           ,'Restaurant'
+			,'Upscale chain serving New American fare paired with house-label wines in a contemporary setting.'
+	,'$$, takes reservations, alcohol, happy hour, gluten free options, catering'
+           ,'Monday - Thursday 11:00AM - 9:30PM, Friday - Saturday 11:00AM - 10:30PM, Sunday 11:00AM - 9:00PM');		
+	 
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+	,[features]
+           ,[hours])
+     VALUES
+		('PIPI'
+           ,'Pies and Pints' 
+           ,'Restaurant'
+		,'Pizzeria chain offering an array of craft beers, plus specialty pizzas, salads & sandwiches.'
+	,'$$, happy hour, alcohol, gluten free options'
+           ,'Monday - Thursday 11:00AM - 10:00PM, Friday - Saturday 11:00AM - 12:00AM, Sunday 11:00AM - 9:00PM');		
+	 
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+		   ,[features]
+           ,[hours])
+     VALUES
+	('AMCD'
+           ,'AMC Dine-In' 
+           ,'Theater'
+	,'Attention all film fans! Get your tickets and snacks, then get ready to kick back and experience the AMC Theatres® difference!'
+           ,'food, family-friendly'
+		   ,'Depends on Movie Show Times');		
+	 
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+	,[features]
+           ,[hours])
+     VALUES
+	('FUBO'
+           ,'Funny Bone' 
+           ,'Bar/ Nightclub'
+	,'Comedy chain outpost hosting local & major talent, with the option of casual American dining.'
+	,'Food, gluten free options, 21+, sometimes 18+, alcohol'
+           ,'Depends on Show');		
+	 
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+		   ,[features]
+           ,[hours])
+     VALUES
+	('LEGO'
+           ,'LegoLand Discovery Center' 
+           ,'Activity Center'
+	,'LEGOLAND Discovery Center Columbus is the ultimate indoor LEGO playground with 2 rides, 10 LEGO build & play zones, a 4D cinema & much more!'
+           ,'Family-friendly'
+		   ,'Monday - Thursday 10:00AM - 7:00PM, Friday - Saturday 10:00AM - 8:00PM, Sunday 10:00AM - 7:00PM');		
+	 
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+	,[features]
+           ,[hours])
+     VALUES
+	('BUDO'
+           ,'Buckeye Donuts' 
+           ,'Restaurant'
+	,'24-hour donut shop in the heart of the OSU campus area serving breakfast fare,    donuts & Greek gyros.'
+	,'$, catering'
+           ,'Open 24/7');		
+	 
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+	,[features]
+           ,[hours])
+     VALUES
+	('COTA'
+           ,'Condado Tacos' 
+           ,'Restaurant'
+	,'Laid-back spot for margaritas & tacos with your own fillings, like beef brisket & "dirty sauce."'
+	,'$, takes reservations, vegetarian options, gluten free options, happy hour, alcohol, catering'
+           ,'Monday - Sunday 11:00AM - 2:00AM');		
+	 
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+	,[features]
+           ,[hours])
+     VALUES
+		('WEXA'
+           ,'Wexner Center for Arts' 
+           ,'Museum'
+		,'The Wexner Center for the Arts is The Ohio State University’s "multidisciplinary, international laboratory for the exploration and advancement of contemporary art".'
+	,'Family friendly'
+           ,'Monday - Wednesday 9:00AM - 6:00PM, Thursday- Friday 9:00AM - 8:00PM, Saturday 12:00 - 7:00PM, Sunday 12:00 - 4:00PM');		
+	 
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+	,[features]
+           ,[hours])
+     VALUES
+	('CAMU'
+           ,'Billy Ireland Cartoon Museum' 
+           ,'Museum'
+		,'Free museum that holds the largest collection of cartoons and comics in the world, and features rotating exhibitions of historic, classic and modern comics.'
+	,'Family friendly'
+           ,'Monday Closed, Tuesday - Sunday 1:00 - 5:00PM');		
+	 
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+		   ,[features]
+           ,[hours])
+     VALUES
+			('ROSE'
+           ,'Park of Roses' 
+           ,'MetroPark'
+	,'A 13-acre landscaped recreation area specializing in roses, plus perennial & herb gardens.'
+           ,'Outdoors, scenic'
+		   ,'Monday - Sunday  7:00AM - 11:00PM');		
+	 
+INSERT INTO [dbo].[Attractions]
+           ([code]
+           ,[name]
+           ,[type]
+           ,[description]
+	,[features]
+           ,[hours])
+     VALUES
+			('HDOG'
+           ,'Hounddog''s 3 Degree Pizza' 
+           ,'Restaurant'
+			,'Creative pizzas, classic subs & dozens of beers served in a cozy storefront a mile from Ohio State.'
+	,'$$, alcohol'
+           ,'Monday - Sunday 9:00AM - 2:15AM');		
+	 	 
+
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+		   ,[latitude]
+		   ,[longitude])
+     VALUES
+           ('Downtown'
+		   ,'DT'
+		   ,'DT-ELEV'
+		   ,'ELEV'
+		   ,'165 N 4th St, Columbus, OH 43215'
+		   ,39.966250
+		   ,-83.001838
+           )
+		   
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+		   		   ,[latitude]
+		   ,[longitude])
+     VALUES
+           ('Downtown'
+		   ,'DT'
+		   ,'DT-AMIC'
+		   ,'AMIC'
+		   ,'67 E Gay St, Columbus, OH 43215'
+		   ,39.963690
+		   ,-82.998930
+           )
+		   
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+		   		   ,[latitude]
+		   ,[longitude])
+     VALUES
+           ('Downtown'
+		   ,'DT'
+		   ,'DT-MILE'
+		   ,'MILE'
+		   ,'229 S Civic Center Dr, Columbus, OH 43215'
+		   ,39.957090
+		   ,-83.003560
+           )
+		   
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+		   		   ,[latitude]
+		   ,[longitude])
+     VALUES
+           ('Downtown'
+		   ,'DT'
+		   ,'DT-FRAN'
+		   ,'FRAN'
+		   ,'248 S 4th St, Columbus, OH 43215'
+		   ,39.957530
+		   ,-82.995080
+           )
+		  
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+		   ,[latitude]
+		   ,[longitude])
+     VALUES
+           ('Downtown'
+		   ,'DT'
+		   ,'DT-MIRA'
+		   ,'MIRA'
+		   ,'2 Miranova Pl, Columbus, OH 43215'
+		   ,39.954520
+		   ,-83.006020
+           )
+		  
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+		   		   ,[latitude]
+		   ,[longitude])
+     VALUES
+           ('Downtown'
+		   ,'DT'
+		   ,'DT-COSI'
+		   ,'COSI'
+		   ,'333 W Broad St, Columbus, OH 43215'
+		   ,39.965359
+		   ,-82.973778
+           )
+		   
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+		   		   ,[latitude]
+		   ,[longitude])
+     VALUES
+           ('Downtown'
+		   ,'DT'
+		   ,'DT-LAND'
+		   ,'LAND'
+		   ,'424 W Town St, Columbus, OH 43215'
+		   ,39.957620
+		   ,-83.011450
+           )
+
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+		   		   ,[latitude]
+		   ,[longitude])
+     VALUES
+           ('Downtown'
+		   ,'DT'
+		   ,'DT-NORT'
+		   ,'NORT'
+		   ,'59 Spruce St, Columbus, OH 43215'
+		   ,39.971889
+		   ,-83.004181
+           )
+
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+		   		   ,[latitude]
+		   ,[longitude])
+     VALUES
+           ('Downtown'
+		   ,'DT'
+		   ,'DT-EXPR'
+		   ,'EXPR'
+		   ,'405 Neil Ave, Columbus, OH 43215'
+		   ,39.969730
+		   ,-83.009872
+           )
+		   
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+		   		   ,[latitude]
+		   ,[longitude])
+     VALUES
+           ('Downtown'
+		   ,'DT'
+		   ,'DT-ARTM'
+		   ,'ARTM'
+		   ,'480 E Broad St, Columbus, OH 43215'
+		   ,39.964821
+		   ,-82.978752
+		             )
+
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+		   		   ,[latitude]
+		   ,[longitude])
+     
+	VALUES
+           ('Downtown'
+		   ,'DT'
+		   ,'DT-16BT'
+		   ,'16BT'
+		   ,'254 S 4th St, Columbus, OH 43215'
+		   ,39.957401
+		   ,-82.995049
+           )
+
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+		   ,[latitude]
+		   ,[longitude])
+    	VALUES
+           ('Short North'
+		   ,'SN'
+		   ,'SN-SKUL'
+		   ,'SKUL'
+		   ,'1151 N High St, Columbus, OH 43201'
+		   ,39.985850
+		   ,-83.005490
+           )
+		   
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+		   ,[latitude]
+		   ,[longitude])
+ 	VALUES
+           ('Short North'
+		   ,'SN'
+		   ,'SN-AXIS'
+		   ,'AXIS'
+		   ,'775 N. High St., Columbus, OH 43215'
+		   ,39.977970
+		   ,83.004350
+           )
+		  
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+		   		   ,[latitude]
+		   ,[longitude])
+     VALUES
+           ('Short North'
+		   ,'SN'
+		   ,'SN-JENI'
+		   ,'JENI'
+		   ,'714 N. High St., Columbus, OH 43215'
+		   ,39.976970
+		   ,-83.003350
+		              )
+		   
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+		   		   ,[latitude]
+		   ,[longitude])
+     VALUES
+           ('Short North'
+		   ,'SN'
+		   ,'SN-MELT'
+		   ,'MELT'
+		   ,'840 N High St, Columbus, OH 43215'
+		   ,39.979460
+		   ,-83.003800
+		   
+           )
+		   		   
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           		,[attraction_address]
+,[latitude]
+		   ,[longitude])
+     VALUES
+           ('Short North'
+		   ,'SN'
+		   ,'SN-SSBW'
+		   ,'SSBW'
+		   ,'1101 N. 4th St., Columbus, OH 43201'
+		,'39.985374'
+		,'-82.999676'
+           )
+		   		   
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+,[latitude]
+		   ,[longitude])
+     VALUES
+           ('Short North'
+		   ,'SN'
+		   ,'SN-FOXC'
+		   ,'FOXC'
+		   ,'1031 N 4th St, Columbus, OH 43201'
+,'39.984155'
+		,'-82.999437'
+           )
+		   		   
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+,[latitude]
+		   ,[longitude])
+     VALUES
+           ('Polaris/ North'
+		   ,'PN'
+		   ,'PN-POFP'
+		   ,'POFP'
+		   ,'1500 Polaris Pkwy, Columbus, OH 43240'
+		,'40.145471'
+		,'-82.981499'
+           )
+		   		   
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+,[latitude]
+		   ,[longitude])
+     VALUES
+          ('Polaris/ North'
+		   ,'PN'
+		   ,'PN-IKEA'
+		   ,'IKEA'
+		   ,'1900 Ikea Way, Columbus, OH 43240'
+		,'40.150137'
+		,'-82.96679'
+           )
+		   		   
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+	,[latitude]
+		   ,[longitude])
+     VALUES
+          ('Polaris/ North'
+		   ,'PN'
+		   ,'PN-CAXE'
+		   ,'CAXE'
+		   ,'2577, 6124 Busch Blvd, Columbus, OH 43229'
+		,40.093119
+		,'-82.989078'
+           )
+		   		   
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+	,[latitude]
+		   ,[longitude])
+     VALUES
+          ('Polaris/ North'
+		   ,'PN'
+		   ,'PN-CZOO'
+		   ,'CZOO'
+		   ,'4850 Powell Rd, Powell, OH 43065'
+		,'40.157831'
+		,'-83.118863'
+           )
+		   		   
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+	,[latitude]
+		   ,[longitude])
+     VALUES
+          ('Polaris/ North'
+		   ,'PN'
+		   ,'PN-POGL'
+		   ,'POGL'
+		   ,'1835 Polaris Pkwy, Columbus, OH 43240'
+		,'40.14111'
+		,'-82.968697'
+           )
+		   		 
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+,[latitude]
+		   ,[longitude])
+     VALUES
+          ('Polaris/ North'
+		   ,'PN'
+		   ,'PM-CARF'
+		   ,'CARF'
+		   ,'2025 Polaris Pkwy, Columbus, OH 43240'
+		,'40.144372'
+		,'-82.963355'
+           )
+		   		 
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+	,[latitude]
+		   ,[longitude])
+     VALUES
+          ('Easton'
+		   ,'EA'
+		   ,'EA-OCCL'
+		   ,'OCCL'
+		   ,'4002 Easton Station, Columbus, OH 43219'
+		,'40.050034'
+		,'-82.915018'
+           )
+		   		 
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+	,[latitude]
+		   ,[longitude])
+     VALUES
+          ('Easton'
+		   ,'EA'
+		   ,'EA-COHA'
+		   ,'COHA'
+		   ,'4230 The Strand, Columbus, OH 43219'
+		,'40.054179'
+		,'-82.914938'
+           )
+		   		 
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+	,[latitude]
+		   ,[longitude])
+     VALUES
+          ('Easton'
+		   ,'EA'
+		   ,'EA-PIPI'
+		   ,'PIPI'
+		   ,'4205 Easton Gateway Dr, Columbus, OH 43219'
+		,'40.055743'
+		,'-82.906836'
+           )
+		   		 
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+	,[latitude]
+		   ,[longitude])
+     VALUES
+          ('Easton'
+		   ,'EA'
+		   ,'EA-AMCD'
+		   ,'AMCD'
+		   ,'275 Easton Town Center, Columbus, OH 43219'
+		,'40.05149'
+		,'-82.915271'
+           )
+		   		 
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+	,[latitude]
+		   ,[longitude])
+     VALUES
+          ('Easton'
+		   ,'EA'
+		   ,'EA-FUBO'
+		   ,'FUBO'
+		   ,'14p5 Easton Town Center, Columbus, OH 43219'
+		,'40.050584'
+		,'-82.916091'
+           )
+		   		 
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+,[latitude]
+		   ,[longitude])
+     VALUES
+          ('Easton'
+		   ,'EA'
+		   ,'EA-LEGO'
+		   ,'LEGO'
+		   ,'157 Easton Town Cente'
+		,'40.05099'
+		,'-82.915765'
+           )
+		   
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+		   ,[latitude]
+		   ,[longitude])
+     VALUES
+          ('Campus/ Upper Arlington'
+		   ,'CA'
+		   ,'CA-BUDO'
+		   ,'BUDO'
+		   ,'1998 N High St, Columbus, OH 43201'
+		,'40.003028'
+		,'-83.008425'
+           )
+		   		 
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+	,[latitude]
+		   ,[longitude])
+     VALUES
+          ('Campus/ Upper Arlington'
+		   ,'CA'
+		   ,'CA-COTA'
+		   ,'COTA'
+		   ,'1227 N High St, Columbus, OH 43201'
+		,'39.987477'
+		,'-83.00588'
+           )
+		   		 
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+	,[latitude]
+		   ,[longitude])
+     VALUES
+          ('Campus/ Upper Arlington'
+		   ,'CA'
+		   ,'CA-WEXA'
+		   ,'WEXA'
+		   ,'1871 N High St, Columbus, OH 43210'
+		,'40.000477'
+		,'-83.008909'
+           )
+		   		 
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+	,[latitude]
+		   ,[longitude])
+     VALUES
+          ('Campus/ Upper Arlington'
+		   ,'CA'
+		   ,'CA-CAMU'
+		   ,'CAMU'
+		   ,'1813 N High St, Columbus, OH 43210'
+		,'39.999455'
+		,'-83.008749'
+           )
+		   		 
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+	,[latitude]
+		   ,[longitude])
+     VALUES
+          ('Campus/ Upper Arlington'
+		   ,'CA'
+		   ,'CA-ROSE'
+		   ,'ROSE'
+		   ,'3901 N High St, Columbus, OH 43214'
+		,'40.041426'
+		,'-83.019406'
+           )
+		   		 
+INSERT INTO [dbo].[Neighborhoods]
+           ([neighborhood_name] 
+           ,[neighborhood_id]
+		   ,[attraction_neighborhood] 
+		   ,[attraction_code]
+           ,[attraction_address]
+	,[latitude]
+		   ,[longitude])
+     VALUES
+          ('Campus/ Upper Arlington'
+		   ,'CA'
+		   ,'CA-HDOG'
+		   ,'HDOG'
+		   ,'2657 N High St, Columbus, OH 43202'
+		,'40.01643'
+		,'83.01186'
+           )
+   		 
+
+
+
+
+
+
+
+

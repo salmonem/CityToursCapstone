@@ -1,0 +1,15 @@
+DROP TABLE Itineraries;
+
+CREATE TABLE [dbo].[Itineraries](
+	[trip] [nvarchar] (4) NOT NULL,
+	[userId] [nvarchar] (450) NOT NULL,
+	[itinerary_items] [nvarchar] (max) NOT NULL,
+	[date_saved] [datetime] NOT NULL
+
+PRIMARY KEY CLUSTERED 
+(
+	[trip] ASC
+))
+
+ALTER TABLE [Itineraries]
+ADD FOREIGN KEY (userId) REFERENCES AspNetUsers(Id);

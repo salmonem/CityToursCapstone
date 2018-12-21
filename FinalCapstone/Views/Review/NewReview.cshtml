@@ -1,0 +1,28 @@
+﻿@model Review
+@{
+    ViewData["Title"] = "NewReview";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>New Review</h2>
+
+
+<form asp-controller="review" asp-action="newreview" method="post">
+
+    <div>
+        <label asp-for="Subject">Subject</label>
+        <input asp-for="Subject" />
+        <span asp-validation-for="Subject"></span>
+    </div>
+    <div>
+        <label asp-for="Message">Message</label>
+        <input asp-for="Message" />
+        <span asp-validation-for="Message"></span>
+    </div>
+    <div>
+        <label asp-for="Rating">Rating( out of 5 stars)</label>
+        <input asp-for="Rating" />
+        <span asp-validation-for="Rating"></span>
+    </div>
+    <button type="submit" class="forum">Submit!</button>
+</form>

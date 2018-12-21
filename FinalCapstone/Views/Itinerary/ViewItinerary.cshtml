@@ -1,0 +1,155 @@
+﻿@model Itinerary
+
+@{
+    ViewData["Title"] = "Itinerary";
+}
+
+
+<div class="itinerary-body">
+    <div class="view-itinerary">
+        <h2><strong>Itinerary</strong></h2>
+    </div>
+    <div class="view-itinerary">
+        <form asp-controller="Neighborhood" asp-action="Neighborhoods">
+            <button id="grey-button" type="submit">   Click here to browse local neighborhoods and select attractions to add to your itinerary.</button>
+        </form>
+    </div>
+
+    <section id="landmarks" class="wrapper special">
+        <div class="flex-container">
+            @foreach (ItineraryItem item in Model.Items)
+            {
+                <div id="box">
+                    <a asp-controller="Landmark" asp-action="Detail" asp-route-id="@(item.Landmark.Code)">
+                        <h3><b>@item.Landmark.Name</b></h3>
+                    </a>
+                    <h5>@item.Landmark.AttractionAddress</h5>
+                    <img src="~/images/@(@item.Landmark.AttractionNeighborhoodCode).jpg" alt="@item.Landmark.Name Photo">
+                    <form method="post" asp-action="RemoveFromItinerary" asp-controller="Itinerary">
+                        <input type="hidden" value="@item.Landmark.Code" name="id" />
+                        <button id="grey-button">Remove from Itinerary</button>
+                    </form>
+                </div>
+            }
+        </div>
+    </section>
+    <section class="container">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="grey-button">
+                <form method="post" asp-action="SaveUserItinerary" asp-controller="Itinerary">
+                    <input type="hidden" value="@Model.Items" name="id" />
+                    <button id="grey-button"><b>Save Itinerary</b></button>
+                </form>
+            </div>
+            <div class="itinerary-button">
+                <form method="post" asp-action="DeleteItinerary" asp-controller="Itinerary">
+                    <input type="hidden" value="@Model.Items" name="id" />
+                    <button id="grey-button"><b>Delete Itinerary</b></button>
+                </form>
+            </div>
+        }
+    </section>
+
+    <h2 class="grey-button"><strong>Itinerary Route Directions</strong></h2>
+    <section>
+        <div id="right-panel">
+            <div>
+                <b>Start:</b>
+                <select id="start">
+                    @foreach (ItineraryItem item in Model.Items)
+                    {
+                        <option value="@item.Landmark.AttractionAddress">@item.Landmark.Name</option>
+                    }
+                </select>
+                <br>
+                <b>Waypoints:</b> <br>
+                <i><b>(Ctrl+Click or Cmd+Click for multiple selection)</b></i> <br>
+                <select multiple id="waypoints">
+                    @foreach (ItineraryItem item in Model.Items)
+                    {
+                        <option value="@item.Landmark.AttractionAddress">@item.Landmark.Name</option>
+                    }
+                </select>
+                <br>
+                <b>End:</b>
+                <select id="end">
+                    @foreach (ItineraryItem item in Model.Items)
+                    {
+                        <option value="@item.Landmark.AttractionAddress">@item.Landmark.Name</option>
+                    }
+                </select>
+                <br>
+                <input type="submit" id="submit">
+            </div>
+            <div id="directions-panel"></div>
+        </div>
+        <div id="googleMap" style="width:75%;height:475px;"></div>
+    </section>
+</div>
+<div id="map-box">
+    <div id="map"></div>
+</div>
+
+@section Scripts
+    {
+    <script>
+        function initMap() {
+            var directionsService = new google.maps.DirectionsService;
+            var directionsDisplay = new google.maps.DirectionsRenderer;
+            var mapProp = {
+                center: new google.maps.LatLng(39.9831403, -83.0141352),
+                zoom: 10,
+            };
+            var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+            directionsDisplay.setMap(map);
+
+
+            document.getElementById('submit').addEventListener('click', function () {
+                calculateAndDisplayRoute(directionsService, directionsDisplay);
+            });
+        }
+
+        function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+            var waypts = [];
+            var checkboxArray = document.getElementById('waypoints');
+            for (var i = 0; i < checkboxArray.length; i++) {
+                if (checkboxArray.options[i].selected) {
+                    waypts.push({
+                        location: checkboxArray[i].value,
+                        stopover: true
+                    });
+                }
+            }
+
+            directionsService.route({
+                origin: document.getElementById('start').value,
+                destination: document.getElementById('end').value,
+                waypoints: waypts,
+                optimizeWaypoints: true,
+                travelMode: 'DRIVING'
+            }, function (response, status) {
+                if (status === 'OK') {
+                    directionsDisplay.setDirections(response);
+                    var route = response.routes[0];
+                    var summaryPanel = document.getElementById('directions-panel');
+                    summaryPanel.innerHTML = '';
+                    // For each route, display summary information.
+                    for (var i = 0; i < route.legs.length; i++) {
+                        var routeSegment = i + 1;
+                        summaryPanel.innerHTML += '<b>Route Segment: ' + routeSegment +
+                            '</b><br>';
+                        summaryPanel.innerHTML += route.legs[i].start_address + ' to ';
+                        summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
+                        summaryPanel.innerHTML += route.legs[i].distance.text + '<br><br>';
+                    }
+                } else {
+                    window.alert('Directions request failed due to ' + status);
+                }
+            });
+        }
+    </script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAz8sxcJr1NftORWam7yifKGupbk_Y09a8&callback=initMap">
+    </script>
+}

@@ -1,0 +1,22 @@
+﻿@model IList<Trip>
+@{
+    ViewData["Title"] = "Saved Itineraries";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2><strong>Saved Itineraries</strong></h2>
+
+<section>
+    @foreach (Trip trip in Model)
+    {
+        <div>
+            <h3><strong>Itinerary from:</strong> <br /> @trip.DateSaved</h3>
+            <form asp-controller="Itinerary" asp-action="SavedItinerary" asp-route-id="@(trip.Id)">
+                <button id="grey-button" type="submit">View Itinerary</button>
+            </form>
+            <form asp-controller="Itinerary" asp-action="DeleteSavedItinerary" asp-route-id="@(trip.Id)">
+                <button id="grey-button" type="submit">Delete Itinerary</button>
+            </form>
+        </div>
+    }
+</section>

@@ -1,0 +1,76 @@
+﻿@{
+    ViewBag.Title = "Satyaprakash Bhubaneswar Google Map";
+}
+
+<title>@ViewBag.Title</title>
+
+
+<html>
+<style>
+    #map {
+        height: 100%;
+    }
+
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+</style>
+<script>
+    var map;
+
+    function initMap() {
+        var myLatLng = { lat: 41.079351, lng: -0.758057 };
+
+        var madrid = { lat: 40.416775, lng: -3.70379 };
+        var barca = { lat: 41.385064, lng: 2.173403 };
+
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 4,
+            center: myLatLng,
+            gestureHandling: "greedy"
+        });
+
+        var marker1 = new google.maps.Marker({
+            position: madrid,
+            map: map,
+            title: 'Madrid'
+        });
+
+        var marker2 = new google.maps.Marker({
+            position: barca,
+            map: map,
+            title: 'Barcelona'
+        });
+
+        google.maps.event.addListener(map, "projection_changed", function () {
+            var d = distanceInPx(marker1, marker2);
+            document.getElementById("distance").innerHTML = "Distance: " + d;
+        });
+
+        google.maps.event.addListener(map, "zoom_changed", function () {
+            var d = distanceInPx(marker1, marker2);
+            document.getElementById("distance").innerHTML = "Distance: " + d;
+        });
+    }
+
+    function distanceInPx(marker1, marker2) {
+        var p1 = map.getProjection().fromLatLngToPoint(marker1.getPosition());
+        var p2 = map.getProjection().fromLatLngToPoint(marker2.getPosition());
+
+        var pixelSize = Math.pow(2, -map.getZoom());
+
+        var d = Math.sqrt((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y)) / pixelSize;
+
+        return d;
+    }</script>
+
+<div id="distance"></div>
+<div id="map"></div>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAz8sxcJr1NftORWam7yifKGupbk_Y09a8&callback=initMap">
+
+</script>
+
+</html>

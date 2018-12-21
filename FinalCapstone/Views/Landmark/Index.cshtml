@@ -1,0 +1,24 @@
+@model IList<Landmark>
+@{
+    ViewData["Title"] = "NeighborhoodView";
+}
+
+
+
+<section id="landmarks" class="wrapper special">
+    <div class="flex-container">
+        @foreach (Landmark landmark in Model)
+        {
+            <div id="box">
+                <h3><b>@landmark.Name</b></h3>
+                <h4>@landmark.AttractionAddress</h4>
+                <a asp-controller="Landmark" asp-action="Detail" asp-route-id="@(landmark.Code)">
+                    <img class="neighborhood-image" src="~/images/@(landmark.NeighborhoodId)-@(landmark.Code).jpg" alt="@landmark.NeighborhoodName Photo">
+                </a>
+                <form asp-controller="Landmark" asp-action="Detail" asp-route-id="@(landmark.Code)">
+                    <button id="grey-button" type="submit">More</button>
+                </form>
+            </div>
+        }
+    </div>
+</section>

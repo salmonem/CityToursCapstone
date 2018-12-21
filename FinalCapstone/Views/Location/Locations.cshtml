@@ -1,0 +1,94 @@
+﻿
+@model IList<Location>
+
+@{
+    ViewData["Title"] = "Attractions Nearby";
+}
+<body>
+    <class ="title">
+        <h2>@Model[0].Name</h2>
+        <p>Mapped locations are within 3 miles of @Model[0].Name</p>
+        <p>Click on a mapped location to see name and distance from your chosen landmark.</p>
+    </class>
+    @section Scripts
+        {
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+        <div id="map-box">
+            <div id="map" style="width:75%;height:325px;"> </div>
+        </div>
+
+        <script>
+        var locations = @Html.Raw(Json.Serialize(Model));
+            var landmarkLocation = locations[0];
+        </script>
+
+        <script>
+            function setUpMap() {
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 13,
+                    center: new google.maps.LatLng(landmarkLocation.latitude, landmarkLocation.longitude),
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                });
+
+                var infowindow = new google.maps.InfoWindow({});
+                var marker;
+                var i;
+                for (i = 0; i < locations.length; i++) {
+                    marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(locations[i].latitude, locations[i].longitude),
+                        map: map
+                    });
+                    google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                        return function () {
+                            var content = locations[i].name + ", " + locations[i].distance;
+                            infowindow.setContent(content);
+                            infowindow.open(map, marker);
+                        }
+                    })(marker, i));
+                }
+            }
+
+            function parseLocationDistances(googleData) {
+                var origins = googleData.originAddresses;
+
+                for (var i = 0; i < origins.length; i++) {
+                    var results = googleData.rows[i].elements;
+                    for (var j = 0; j < results.length; j++) {
+                        var element = results[j];
+                        locations[j].distance = element.distance.text;
+                    }
+                }
+            }
+
+        </script>
+
+        <script>
+            function initMap() {
+                var destinations = locations.map(function (loc) { return new google.maps.LatLng(loc.latitude, loc.longitude); })
+
+                var service = new google.maps.DistanceMatrixService();
+                service.getDistanceMatrix(
+                    {
+                        origins: [new google.maps.LatLng(landmarkLocation.latitude, landmarkLocation.longitude)],
+                        destinations: destinations,
+                        travelMode: 'DRIVING',
+                        unitSystem: google.maps.UnitSystem.IMPERIAL,
+                        avoidHighways: false,
+                        avoidTolls: false,
+                    }, function (response, status) {
+                        if (status == 'OK') {
+                            parseLocationDistances(response)
+                            setUpMap();
+                        }
+                    });
+            }
+        </script>
+
+        <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAz8sxcJr1NftORWam7yifKGupbk_Y09a8&callback=initMap">
+        </script>
+    }
+</body>
+
+

@@ -1,0 +1,45 @@
+﻿@model NeighborhoodViewModel
+
+@{
+    ViewData["Title"] = "Landmarks";
+}
+
+<body>
+    <header id="random-title">
+        <h2>Choose a Landmark to View What's Nearby</h2>
+    </header>
+    <section id="landmarks" class="wrapper special">
+        <div class="flex-container">
+            <div id="box">
+                <a asp-controller="Location" asp-action="Locations" asp-route-id="OSU">
+                    <img src="~/images/OSU-Stadium.jpg" />
+                    <h3> OSU Stadium</h3>
+                </a>
+            </div>
+            <div id="box">
+                <a asp-controller="Location" asp-action="Locations" asp-route-id="SN">
+                    <img src="~/images/SN.jpg" />
+                    <h3>The Short North</h3>
+                </a>
+            </div>
+            <div id="box">
+                <a asp-controller="Location" asp-action="Locations" asp-route-id="PN">
+                    <img src="~/images/PN-POFP.jpg" />
+                    <h3>Polaris Fashion Place</h3>
+                </a>
+            </div>
+            <div id="box">
+                <a asp-controller="Location" asp-action="Locations" asp-route-id="SH">
+                    <img src="~/images/statehouse.jpg">
+                    <h3>The Ohio Statehouse</h3>
+                </a>
+            </div>
+            <div id="box">
+                <a asp-controller="Location" asp-action="Locations" asp-route-id="OT">
+                    <img src="~/images/OT.jpg">
+                    <h3>The Ohio Theater</h3>
+                </a>
+            </div>
+        </div>
+    </section>
+</body>

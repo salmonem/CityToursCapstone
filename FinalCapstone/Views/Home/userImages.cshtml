@@ -1,0 +1,11 @@
+﻿@model UploadImage
+@{
+    ViewData["Title"] = "UserLandmarkImages";
+}
+
+<h2>UserImages</h2>
+
+@foreach (var image in Model.Images)
+{
+    <img class="image-detail" src="~/userImages/@(image)" alt="@image" >
+}
